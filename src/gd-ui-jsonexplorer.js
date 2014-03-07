@@ -70,8 +70,10 @@ angular.module('gd.ui.jsonexplorer', [])
 				};
 
 				var ellipsisHTML = '<span class="ellipsis"> &hellip; </span>'
+
 				//Convert an array, [1,2,3,4], to an HTML structure.
-				formatter.arrayToHtml = function (json, isTopLevel) {
+				//If 'expanded === true', then the entire substructure is not collapsed by default.
+				formatter.arrayToHtml = function (json, expanded) {
     				var output = '';
     				var numProps = json.length;
     				var hasContents = numProps > 0;
@@ -88,8 +90,8 @@ angular.module('gd.ui.jsonexplorer', [])
 
     				if (hasContents) {
     					var arrayLength = json.length;
-    					if (isTopLevel) {
-    						output = '(' + arrayLength + ') [<ul class="array collapsible" style="display:none">' + output + '</ul>]'
+    					if (expanded) {
+    						output = '(' + arrayLength + ') [<ul class="array collapsible">' + output + '</ul>]'
     					}
     					else {
 	      					output = '(' + arrayLength + ') [' + ellipsisHTML
@@ -104,7 +106,7 @@ angular.module('gd.ui.jsonexplorer', [])
 				};
 
 				//Convert an object, {...}, to an HTML structure
-				formatter.objectToHtml = function (json, isTopLevel) {
+				formatter.objectToHtml = function (json, expanded) {
 					var hasContents = false;
     				var output = '';
     				var numProps = 0;
@@ -125,7 +127,7 @@ angular.module('gd.ui.jsonexplorer', [])
     				}
 
 	    			if (hasContents) {
-	    				if (isTopLevel) {
+	    				if (expanded) {
 	    					output = '{<ul class="obj collapsible">' + output + '</ul>';
 	    				}
 	    				else {
@@ -140,7 +142,7 @@ angular.module('gd.ui.jsonexplorer', [])
 	    			return output;
 				};
 
-				formatter.valueToHtml = function (value, isTopLevel) {
+				formatter.valueToHtml = function (value, expanded) {
 					var type = value && value.constructor;
 					var output = '';
 
@@ -149,11 +151,11 @@ angular.module('gd.ui.jsonexplorer', [])
 					}
 
 					if (value && type == Array) {
-						output += this.arrayToHtml(value, isTopLevel);
+						output += this.arrayToHtml(value, expanded);
 					}
 
 					if (value && type == Object) {
-						output += this.objectToHtml(value, isTopLevel);
+						output += this.objectToHtml(value, expanded);
 					}
 
 					if (type == Number) {
