@@ -128,7 +128,7 @@ angular.module('gd.ui.jsonexplorer', [])
 
 	    			if (hasContents) {
 	    				if (expanded) {
-	    					output = '{<ul class="obj collapsible">' + output + '</ul>';
+	    					output = '{<ul class="obj collapsible">' + output + '</ul>}';
 	    				}
 	    				else {
 		    				output = '{' + ellipsisHTML
