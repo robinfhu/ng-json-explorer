@@ -3,7 +3,9 @@ ng-json-explorer
 
 Simple json explorer angular directive that uses raw json data as source.
 
-This module is based in the firefox jsonview extenrsion made by Ben Hollis: https://github.com/bhollis/jsonview/
+This module is based in the firefox jsonview extension made by Ben Hollis: https://github.com/bhollis/jsonview/
+
+Modifications by Robin Hu.
 
 Usage
 -------------------------
@@ -12,7 +14,7 @@ Check the demo folder (demo.html) for a simple example.
 Including the required files (js and css)
 -------------------------
 ```
-<script src="gd-ui-jsonexplorer.js"></script> 
+<script src="gd-ui-jsonexplorer.js"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="../src/gd-ui-jsonexplorer.css" />
 ```
 
@@ -39,5 +41,5 @@ $scope.data = {
 Using the directive to display the data
 -------------------------
 ```
-<json-explorer json-data="{{data}}"></json-explorer>
+<json-explorer json-data="data"></json-explorer>
 ```

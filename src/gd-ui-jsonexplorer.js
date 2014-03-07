@@ -27,11 +27,11 @@ angular.module('gd.ui.jsonexplorer', [])
 	return {
 		restrict: 'E',
 		scope: {
-			jsonData: '@',
+			jsonData: '=jsonData',
 		},
 		link: function (scope, elem, attrs) {
-			attrs.$observe('jsonData', function (val) {
-				if (val === '') return;
+			scope.$watch('jsonData', function (val) {
+				if (!val) return;
 
 				var output = '';
 				var formatter = {};
@@ -181,7 +181,7 @@ angular.module('gd.ui.jsonexplorer', [])
 					return '<div class="gd-ui-json-explorer">' + this.valueToHtml(json, true) + '</div>';
 				};
 
-				var json = JSON.parse(val);
+				var json = val;
 				var x = formatter.jsonToHtml(json);
 				elem.html(x);
 
@@ -227,7 +227,7 @@ angular.module('gd.ui.jsonexplorer', [])
 						}
 					}
 				}
-			});
+			}, true); //end scope watch
       	}
     }
 });
