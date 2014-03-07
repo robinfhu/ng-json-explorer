@@ -23,7 +23,7 @@ This module is based in the firefox jsonview extenrsion made by Ben Hollis: http
 'use strict';
 
 angular.module('gd.ui.jsonexplorer', [])
-.directive('jsonExplorer', function ($http) {
+.directive('jsonExplorer', function () {
 	return {
 		restrict: 'E',
 		scope: {
@@ -68,34 +68,43 @@ angular.module('gd.ui.jsonexplorer', [])
 				formatter.decorateWithSpan = function (value, className) {
 					return '<span class="' + className + '">' + this.htmlEncode(value) + '</span>';
 				};
-				formatter.arrayToHtml = function (json) {
-					var hasContents = false;
+
+				var ellipsisHTML = '<span class="ellipsis"> &hellip; </span>'
+				//Convert an array, [1,2,3,4], to an HTML structure.
+				formatter.arrayToHtml = function (json, isTopLevel) {
     				var output = '';
-    				var numProps = 0;
+    				var numProps = json.length;
+    				var hasContents = numProps > 0;
 
-    				for (var prop in json ) {
-      					numProps++;
-    				}
-
-    				for (var prop in json) {
-      					hasContents = true;
-      					output += '<li>' + this.valueToHtml(json[prop]);
+    				var _this = this;
+    				json.forEach(function(item, i) {
+      					output += '<li>' + i + ': ' + _this.valueToHtml(item);
       					if (numProps > 1) {
        						output += ',';
       					}
       					output += '</li>';
       					numProps--;
-    				}
+    				});
 
     				if (hasContents) {
-      					output = '[<ul class="array collapsible">' + output + '</ul>]';
+    					var arrayLength = json.length;
+    					if (isTopLevel) {
+    						output = '(' + arrayLength + ') [<ul class="array collapsible" style="display:none">' + output + '</ul>]'
+    					}
+    					else {
+	      					output = '(' + arrayLength + ') [' + ellipsisHTML
+	      						+ '<ul class="array collapsible" style="display:none">'
+	      						+ output + '</ul>]';
+      					}
+
     				} else {
       					output = '[ ]';
     				}
         			return output;
 				};
 
-				formatter.objectToHtml = function (json) {
+				//Convert an object, {...}, to an HTML structure
+				formatter.objectToHtml = function (json, isTopLevel) {
 					var hasContents = false;
     				var output = '';
     				var numProps = 0;
@@ -116,7 +125,14 @@ angular.module('gd.ui.jsonexplorer', [])
     				}
 
 	    			if (hasContents) {
-	      				output = '{<ul class="obj collapsible">' + output + '</ul>}';
+	    				if (isTopLevel) {
+	    					output = '{<ul class="obj collapsible">' + output + '</ul>';
+	    				}
+	    				else {
+		    				output = '{' + ellipsisHTML
+	      						+ '<ul class="obj collapsible" style="display:none">'
+	      						+ output + '</ul>}';
+      					}
 	    			} else {
 	      				output = '{ }';
 	    			}
@@ -124,7 +140,7 @@ angular.module('gd.ui.jsonexplorer', [])
 	    			return output;
 				};
 
-				formatter.valueToHtml = function (value) {
+				formatter.valueToHtml = function (value, isTopLevel) {
 					var type = value && value.constructor;
 					var output = '';
 
@@ -133,11 +149,11 @@ angular.module('gd.ui.jsonexplorer', [])
 					}
 
 					if (value && type == Array) {
-						output += this.arrayToHtml(value);
+						output += this.arrayToHtml(value, isTopLevel);
 					}
 
 					if (value && type == Object) {
-						output += this.objectToHtml(value);
+						output += this.objectToHtml(value, isTopLevel);
 					}
 
 					if (type == Number) {
@@ -160,12 +176,17 @@ angular.module('gd.ui.jsonexplorer', [])
 					return output;
 				};
 				formatter.jsonToHtml = function (json) {
-					return '<div class="gd-ui-json-explorer">' + this.valueToHtml(json) + '</div>';
+					return '<div class="gd-ui-json-explorer">' + this.valueToHtml(json, true) + '</div>';
 				};
 
 				var json = JSON.parse(val);
 				var x = formatter.jsonToHtml(json);
 				elem.html(x);
+
+				/**
+				Event handler for when user clicks on a +/- button to collapse/un-collapse
+				the JSON object.
+				*/
 				function collapse (evt) {
 					var collapser = evt.target;
     				var target = collapser.parentNode.getElementsByClassName('collapsible');
@@ -198,7 +219,7 @@ angular.module('gd.ui.jsonexplorer', [])
 						if (collectionItem.parentNode.nodeName == 'LI') {
 							var collapser = document.createElement('div');
 							collapser.className = 'collapser';
-							collapser.innerHTML = '-';
+							collapser.innerHTML = '+';
 							collapser.addEventListener('click', collapse, false);
 							collectionItem.parentNode.insertBefore(collapser, collectionItem.parentNode.firstChild);
 						}
