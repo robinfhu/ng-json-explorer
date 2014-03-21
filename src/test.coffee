@@ -186,6 +186,21 @@ describe 'JSON Explorer Tests', ->
 				nestedUl.className.should.contain 'hide'
 				ellipsis.className.should.not.contain 'hide'
 
+			it 'hides the correct ellipsis', ->
+				element = create
+					nested:
+						hello: 'world'
+						foo:
+							bar: 123
+
+				collapser = element.querySelector 'ul.obj li .collapser'
+
+				collapser.click()
+
+				ellipsis = element.querySelectorAll 'ul.obj li .ellipsis'
+
+				ellipsis.should.have.length 2
+
 
 
 

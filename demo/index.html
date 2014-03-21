@@ -11,7 +11,7 @@
 		angular.module('app', ['gd.ui.jsonexplorer'])
 		.controller('DemoCtrl', function ($scope) {
 			$scope.data = {
-				'name': 'Json Explorer',
+				/*'name': 'Json Explorer',
 				'qty': 10,
 				'has_data': true,
 				'null_data': null,
@@ -21,9 +21,15 @@
 					{
 						'nested': 'object'
 					}
-				],
+				],*/
 				'obj': {
-					'hello': 'world'
+					'hello': 'world',
+					'foo': {
+						'bar': 2,
+						'baz': {
+							'faz': 3
+						}
+					}
 				}
 			};
 		});

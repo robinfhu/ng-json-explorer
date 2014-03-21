@@ -82,8 +82,8 @@
                 li.append(': &nbsp;');
                 processData(val, li);
                 if (isObject) {
-                  li.find('ul').addClass('hide');
-                  li.find('ul').after("<span class='ellipsis'>...</span>");
+                  angular.element(li.find('ul')[0]).addClass('hide');
+                  angular.element(li.find('ul')[0]).after("<span class='ellipsis'>...</span>");
                 }
                 index++;
                 if (index < numProps) {
