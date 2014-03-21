@@ -14,8 +14,8 @@ Check the demo folder (demo.html) for a simple example.
 Including the required files (js and css)
 -------------------------
 ```
-<script src="gd-ui-jsonexplorer.js"></script>
-<link rel="stylesheet" type="text/css" media="screen" href="../src/gd-ui-jsonexplorer.css" />
+<script src="dist/jsonexplorer.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="dist/all.css" />
 ```
 
 Send the json data to your template
@@ -50,5 +50,6 @@ How To Build Source
 Make sure you have node.js installed.
 ```
 npm install
+bower install
 grunt
 ```
