@@ -3,20 +3,24 @@ toKeyVal = (attributes, separator = ' ')->
         .join separator
 
 if angular.mock
-    window.render = angular.mock.render = (directive, data, attributes)->
+    window.render = angular.mock.render =
+    (directive, data = {}, attributes = {}, transclude = "")->
         $element = null
         inject ($compile, $rootScope)->
             $scope = $rootScope.$new()
             $scope[key] = val for key, val of data
             attributes = toKeyVal attributes
 
-            template = $compile("<div #{directive} #{attributes}></div>")
-            $element = template($scope)
+            template = $compile(
+                "<div #{directive} #{attributes}>#{transclude}</div>"
+            )
+            $element = template($scope.$new())
+
+            $element.$scope = $scope
 
             try
                 $scope.$digest()
             catch exception
-                err = "Exception when rendering #{directive}"
-                console.error err, exception
+                console.error "Exception when rendering #{directive}", exception
                 throw exception
         $element

@@ -11,7 +11,7 @@ module.exports = (grunt)->
                 bare: false
             client:
                 files:
-                    'dist/jsonexplorer.js': ['src/*.coffee']
+                    'dist/jsonexplorer.js': ['src/directive.coffee']
 
         karma:
             client:
