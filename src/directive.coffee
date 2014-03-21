@@ -5,14 +5,22 @@ angular.module('gd.ui.jsonexplorer', [])
 		jsonData: '=jsonData'
 	template: '<div class="gd-ui-json-explorer"></div>'
 	link: (scope, elem, attrs)->
-		data = scope.jsonData
 		mainContainer = elem.find('div')
+
+		countProperties = (data)->
+			count = 0
+			for key of data
+				count++
+
+			count
+
 
 		processData = (data,container)->
 			if data instanceof Array
 				container.text '[]'
 			else if data instanceof Object
-				isEmpty = JSON.stringify(data) is '{}'
+				numProps = countProperties data
+				isEmpty = numProps is 0
 
 				container.append '{'
 
@@ -20,11 +28,19 @@ angular.module('gd.ui.jsonexplorer', [])
 					ul = angular.element document.createElement 'ul'
 					ul.addClass 'obj collapsible'
 
+					index = 0
 					for key,val of data
 						li = angular.element document.createElement 'li'
 						ul.append li
 						li.append "<span class='prop'>#{key}</span>"
+						li.append ': &nbsp;'
+
 						processData val, li
+
+						index++
+						if index < numProps
+							li.append ','
+
 
 					container.append ul
 
@@ -38,5 +54,5 @@ angular.module('gd.ui.jsonexplorer', [])
 			else if not data?
 				container.append "<span class='null'>null</span>"
 
-		processData data, mainContainer
+		processData scope.jsonData, mainContainer
 

@@ -7,25 +7,39 @@
       },
       template: '<div class="gd-ui-json-explorer"></div>',
       link: function(scope, elem, attrs) {
-        var data, mainContainer, processData;
-        data = scope.jsonData;
+        var countProperties, mainContainer, processData;
         mainContainer = elem.find('div');
+        countProperties = function(data) {
+          var count, key;
+          count = 0;
+          for (key in data) {
+            count++;
+          }
+          return count;
+        };
         processData = function(data, container) {
-          var isEmpty, key, li, ul, val;
+          var index, isEmpty, key, li, numProps, ul, val;
           if (data instanceof Array) {
             return container.text('[]');
           } else if (data instanceof Object) {
-            isEmpty = JSON.stringify(data) === '{}';
+            numProps = countProperties(data);
+            isEmpty = numProps === 0;
             container.append('{');
             if (!isEmpty) {
               ul = angular.element(document.createElement('ul'));
               ul.addClass('obj collapsible');
+              index = 0;
               for (key in data) {
                 val = data[key];
                 li = angular.element(document.createElement('li'));
                 ul.append(li);
                 li.append("<span class='prop'>" + key + "</span>");
+                li.append(': &nbsp;');
                 processData(val, li);
+                index++;
+                if (index < numProps) {
+                  li.append(',');
+                }
               }
               container.append(ul);
             }
@@ -40,7 +54,7 @@
             return container.append("<span class='null'>null</span>");
           }
         };
-        return processData(data, mainContainer);
+        return processData(scope.jsonData, mainContainer);
       }
     };
   });

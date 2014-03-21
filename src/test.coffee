@@ -93,3 +93,7 @@ describe 'JSON Explorer Tests', ->
 			value.innerText.should.equal 'null'
 
 
+			li[0].innerText.should.contain ':', 'there should be a colon'
+			li[0].innerText.should.contain ',', 'there should be a comma'
+			li[2].innerText.should.not.contain ',',  'last item has no comma'
+
