@@ -43,3 +43,12 @@ Using the directive to display the data
 ```
 <json-explorer json-data="data"></json-explorer>
 ```
+
+How To Build Source
+--------------------------
+
+Make sure you have node.js installed.
+```
+npm install
+grunt
+```
