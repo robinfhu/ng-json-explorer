@@ -6,7 +6,14 @@ module.exports = (grunt)->
             all:
                 files:
                     'dist/all.css': ['style/all.styl']
+        coffee:
+            options:
+                bare: false
+            client:
+                files:
+                    'dist/jsonexplorer.js': ['src/*.coffee']
 
-    grunt.registerTask 'default', 'Perform all code build tasks', ['stylus:all']
+    grunt.registerTask 'default', 'Perform all code build tasks',
+        ['stylus:all','coffee:client']
 
     grunt.finalize()

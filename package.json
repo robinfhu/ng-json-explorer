@@ -14,7 +14,8 @@
     "grunt-contrib-stylus": "~0.9.0",
     "grunt-contrib-watch": "~0.5.3",
     "load-grunt-tasks": "^0.2.1",
-    "grunt-recurse": "^0.2.1"
+    "grunt-recurse": "^0.2.1",
+    "grunt-contrib-coffee": "^0.10.1"
   },
   "dependencies": {
     "coffee-script": "~1.6.3"
