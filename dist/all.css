@@ -12,3 +12,4 @@
 .gd-ui-json-explorer h1{font-size:1.2em}
 .gd-ui-json-explorer .callback + #json{padding-left:1em}
 .gd-ui-json-explorer .callback{font-family:monospace;color:#a52a2a}
+.gd-ui-json-explorer .hide{display:none}

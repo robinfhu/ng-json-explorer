@@ -17,47 +17,49 @@ describe 'JSON Explorer Tests', ->
 
 			should.exist element
 
-		it 'should show empty brackets for empty data set', ->
-			element = create({})
+		describe 'javascript primitives', ->
 
-			element.innerText.should.equal '{}'
+			it 'should show empty brackets for empty data set', ->
+				element = create({})
 
-		it 'should show empty square brackets for empty array', ->
-			element = create([])
+				element.innerText.should.equal '{}'
 
-			element.innerText.should.equal '[]'
+			it 'should show empty square brackets for empty array', ->
+				element = create([])
 
-		it 'should show primitive number', ->
-			element = create(123)
+				element.innerText.should.equal '[]'
 
-			span = element.querySelector 'span.num'
+			it 'should show primitive number', ->
+				element = create(123)
 
-			should.exist span
-			span.innerText.should.equal '123'
+				span = element.querySelector 'span.num'
 
-		it 'should show primitive string', ->
-			element = create('hello')
+				should.exist span
+				span.innerText.should.equal '123'
 
-			span = element.querySelector 'span.string'
+			it 'should show primitive string', ->
+				element = create('hello')
 
-			should.exist span
-			span.innerText.should.equal '"hello"'
+				span = element.querySelector 'span.string'
 
-		it 'should show primitive null', ->
-			element = create(null)
+				should.exist span
+				span.innerText.should.equal '"hello"'
 
-			span = element.querySelector 'span.null'
+			it 'should show primitive null', ->
+				element = create(null)
 
-			should.exist span
-			span.innerText.should.equal 'null'
+				span = element.querySelector 'span.null'
 
-		it 'should show primitive bool', ->
-			element = create(true)
+				should.exist span
+				span.innerText.should.equal 'null'
 
-			span = element.querySelector 'span.bool'
+			it 'should show primitive bool', ->
+				element = create(true)
 
-			should.exist span
-			span.innerText.should.equal 'true'
+				span = element.querySelector 'span.bool'
+
+				should.exist span
+				span.innerText.should.equal 'true'
 
 		it 'should render simple object', ->
 			element = create
@@ -129,6 +131,63 @@ describe 'JSON Explorer Tests', ->
 
 			value = li[3].querySelector 'span.null'
 			value.innerText.should.equal 'null'
+
+		it 'should render nested object', ->
+			element = create
+				nested:
+					hello: 4321
+					foo: 'bar'
+
+			nestedUl = element.querySelector 'ul.obj li ul.obj'
+			should.exist nestedUl
+
+			nestedUl.querySelectorAll('li').should.have.length 2
+			nestedUl.className.should.contain 'hide'
+
+			collapser = element.querySelector 'ul.obj li .collapser'
+
+			should.exist collapser
+			collapser.innerText.should.equal '+'
+
+			ellipsis = element.querySelector 'ul.obj li .ellipsis'
+
+			should.exist ellipsis
+
+		it 'should not show collapser for null value', ->
+			element = create
+				hello: null
+
+			collapser = element.querySelector 'ul.obj li .collapser'
+
+			should.not.exist collapser
+
+
+		describe 'clicking the collapser', ->
+			it 'should show object contents when clicked', ->
+				element = create
+					nested:
+						hello: 4321
+						foo: 'bar'
+
+
+				collapser = element.querySelector 'ul.obj li .collapser'
+				nestedUl = element.querySelector 'ul.obj li ul.obj'
+				ellipsis = element.querySelector 'ul.obj li .ellipsis'
+
+				collapser.click()
+
+				collapser.innerText.should.equal '-'
+				nestedUl.className.should.not.contain 'hide'
+				ellipsis.className.should.contain 'hide'
+
+				collapser.click()
+
+				collapser.innerText.should.equal '+'
+				nestedUl.className.should.contain 'hide'
+				ellipsis.className.should.not.contain 'hide'
+
+
+
 
 
 

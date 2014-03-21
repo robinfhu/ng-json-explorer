@@ -23,7 +23,7 @@
         		Renders a DOM structure that looks nice to the user
          */
         processData = function(data, container) {
-          var index, isEmpty, key, li, numProps, ul, val, _i, _len;
+          var collapser, index, isEmpty, isObject, key, li, numProps, ul, val, _i, _len;
           if (data instanceof Array) {
             container.append('[');
             if (data.length > 0) {
@@ -53,9 +53,38 @@
               for (key in data) {
                 val = data[key];
                 li = angular.element(document.createElement('li'));
+                isObject = angular.isObject(val);
+                if (isObject) {
+
+                  /*
+                  							Show a +/- symbol which lets user expand and collapse
+                  							the object
+                   */
+                  collapser = angular.element(document.createElement('span'));
+                  collapser.addClass('collapser').text('+');
+                  collapser.on('click', function(evt) {
+                    var collapsible, ellipsis, isPlus;
+                    isPlus = evt.target.innerText === '+';
+                    evt.target.innerText = isPlus ? '-' : '+';
+                    collapsible = angular.element(evt.target.parentNode.querySelector('ul.collapsible'));
+                    ellipsis = angular.element(evt.target.parentNode.querySelector('.ellipsis'));
+                    if (isPlus) {
+                      collapsible.removeClass('hide');
+                      return ellipsis.addClass('hide');
+                    } else {
+                      collapsible.addClass('hide');
+                      return ellipsis.removeClass('hide');
+                    }
+                  });
+                  li.append(collapser);
+                }
                 li.append("<span class='prop'>" + key + "</span>");
                 li.append(': &nbsp;');
                 processData(val, li);
+                if (isObject) {
+                  li.find('ul').addClass('hide');
+                  li.find('ul').after("<span class='ellipsis'>...</span>");
+                }
                 index++;
                 if (index < numProps) {
                   li.append(',');
