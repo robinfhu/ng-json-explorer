@@ -33,7 +33,7 @@ This module is based in the firefox jsonview extenrsion made by Ben Hollis: http
   describe('JSON Explorer Tests', function() {
     return describe('module', function() {
       return it('should exist', function() {
-        return expect(true).to.be["true"];
+        return angular.module('gd.ui.jsonexplorer').should.have.property('controller');
       });
     });
   });

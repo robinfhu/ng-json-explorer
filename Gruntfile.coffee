@@ -18,12 +18,18 @@ module.exports = (grunt)->
                 options:
                     browsers: ['Chrome']
                     frameworks: ['mocha','sinon-chai']
+                    reporters: [ 'spec', 'junit']
+                    junitReporter:
+                        outputFile: 'karma.xml'
                     singleRun: true
                     preprocessors:
                         'src/*.coffee': 'coffee'
+                        'tools/*.coffee': 'coffee'
                     files: [
                         'bower_components/angular/angular.js'
-                        'src/test.coffee'
+                        'bower_components/angular-mocks/angular-mocks.js'
+                        'tools/*.coffee'
+                        'src/*.coffee'
                     ]
 
     grunt.registerTask 'default', 'Perform all code build tasks',
