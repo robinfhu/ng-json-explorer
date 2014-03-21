@@ -97,3 +97,42 @@ describe 'JSON Explorer Tests', ->
 			li[0].innerText.should.contain ',', 'there should be a comma'
 			li[2].innerText.should.not.contain ',',  'last item has no comma'
 
+		it 'should render a simple array', ->
+			element = create [123,'hello',false,null,'world']
+
+			ul = element.querySelector 'ul.array.collapsible'
+			li = ul.querySelectorAll 'li'
+
+			should.exist ul
+			li.should.have.length 5
+
+			li[0].innerText.should.contain '0:', 'index number 0'
+			li[1].innerText.should.contain '1:', 'index number 1'
+			li[2].innerText.should.contain '2:', 'index number 2'
+			li[3].innerText.should.contain '3:', 'index number 3'
+			li[4].innerText.should.contain '4:', 'index number 4'
+
+			li[0].innerText.should.contain ',', 'comma'
+			li[3].innerText.should.contain ','
+			li[4].innerText.should.not.contain ',', 'no comma on last item'
+
+			value = li[0].querySelector 'span.num'
+			should.exist value
+
+			value.innerText.should.equal '123'
+
+			value = li[1].querySelector 'span.string'
+			value.innerText.should.equal '"hello"'
+
+			value = li[2].querySelector 'span.bool'
+			value.innerText.should.equal 'false'
+
+			value = li[3].querySelector 'span.null'
+			value.innerText.should.equal 'null'
+
+
+
+
+
+
+

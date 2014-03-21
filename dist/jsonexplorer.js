@@ -17,10 +17,31 @@
           }
           return count;
         };
+
+        /*
+        		Recursively process a JSON object.
+        		Renders a DOM structure that looks nice to the user
+         */
         processData = function(data, container) {
-          var index, isEmpty, key, li, numProps, ul, val;
+          var index, isEmpty, key, li, numProps, ul, val, _i, _len;
           if (data instanceof Array) {
-            return container.text('[]');
+            container.append('[');
+            if (data.length > 0) {
+              ul = angular.element(document.createElement('ul'));
+              ul.addClass('array collapsible');
+              for (index = _i = 0, _len = data.length; _i < _len; index = ++_i) {
+                val = data[index];
+                li = angular.element(document.createElement('li'));
+                li.append("" + index + ": &nbsp;");
+                processData(val, li);
+                if (index < (data.length - 1)) {
+                  li.append(',');
+                }
+                ul.append(li);
+              }
+              container.append(ul);
+            }
+            return container.append(']');
           } else if (data instanceof Object) {
             numProps = countProperties(data);
             isEmpty = numProps === 0;
@@ -32,7 +53,6 @@
               for (key in data) {
                 val = data[key];
                 li = angular.element(document.createElement('li'));
-                ul.append(li);
                 li.append("<span class='prop'>" + key + "</span>");
                 li.append(': &nbsp;');
                 processData(val, li);
@@ -40,6 +60,7 @@
                 if (index < numProps) {
                   li.append(',');
                 }
+                ul.append(li);
               }
               container.append(ul);
             }
