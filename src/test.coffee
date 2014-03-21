@@ -1,18 +1,30 @@
-should = chai.should()
-
 describe 'JSON Explorer Tests', ->
 	describe 'module', ->
 		it 'should exist', ->
 			angular.module('gd.ui.jsonexplorer').should.have.property 'controller'
 
-
 	describe 'directive', ->
 		beforeEach ->
 			angular.mock.module 'gd.ui.jsonexplorer'
 
-		it 'should create a <div>', ->
-			data = {}
-			element = render 'json-explorer', {data}, {'json-data':'data'}
+		create = (data)->
+			elem = render 'json-explorer', {data}, {'json-data':'data'}
 
-			should.exist element[0].querySelector '.gd-ui-json-explorer'
+			elem[0].querySelector '.gd-ui-json-explorer'
+
+		it 'should create a <div>', ->
+			element = create({})
+
+			should.exist element
+
+		it 'should show empty brackets for empty data set', ->
+			element = create({})
+
+			element.innerText.should.equal '{}'
+
+		it 'should show empty square brackets for empty array', ->
+			element = create([])
+
+			element.innerText.should.equal '[]'
+
 
