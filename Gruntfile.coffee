@@ -13,7 +13,20 @@ module.exports = (grunt)->
                 files:
                     'dist/jsonexplorer.js': ['src/*.coffee']
 
+        karma:
+            client:
+                options:
+                    browsers: ['Chrome']
+                    frameworks: ['mocha','sinon-chai']
+                    singleRun: true
+                    preprocessors:
+                        'src/*.coffee': 'coffee'
+                    files: [
+                        'bower_components/angular/angular.js'
+                        'src/test.coffee'
+                    ]
+
     grunt.registerTask 'default', 'Perform all code build tasks',
-        ['stylus:all','coffee:client']
+        ['stylus:all','karma:client', 'coffee:client']
 
     grunt.finalize()
