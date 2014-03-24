@@ -7,7 +7,7 @@
       },
       template: '<div class="gd-ui-json-explorer"></div>',
       link: function(scope, elem, attrs) {
-        var countProperties, mainContainer, processData;
+        var countProperties, createCollapseButton, createEllipsis, mainContainer, processData;
         mainContainer = elem.find('div');
         countProperties = function(data) {
           var count, key;
@@ -19,11 +19,41 @@
         };
 
         /*
+        		Show a +/- symbol which lets user expand and collapse
+        		the object
+         */
+        createCollapseButton = function() {
+          var collapser;
+          collapser = angular.element(document.createElement('span'));
+          collapser.addClass('collapser').text('+');
+          collapser.on('click', function(evt) {
+            var collapsible, ellipsis, ellipsisElems, isPlus;
+            isPlus = evt.target.innerText === '+';
+            evt.target.innerText = isPlus ? '-' : '+';
+            collapsible = angular.element(evt.target.parentNode.querySelector('ul.collapsible'));
+            ellipsisElems = evt.target.parentNode.querySelectorAll('.ellipsis');
+            ellipsis = angular.element(ellipsisElems[ellipsisElems.length - 1]);
+            if (isPlus) {
+              collapsible.removeClass('hide');
+              return ellipsis.addClass('hide');
+            } else {
+              collapsible.addClass('hide');
+              return ellipsis.removeClass('hide');
+            }
+          });
+          return collapser;
+        };
+        createEllipsis = function(liElem) {
+          angular.element(liElem.find('ul')[0]).addClass('hide');
+          return angular.element(liElem.find('ul')[0]).after("<span class='ellipsis'>...</span>");
+        };
+
+        /*
         		Recursively process a JSON object.
         		Renders a DOM structure that looks nice to the user
          */
         processData = function(data, container) {
-          var collapser, index, isEmpty, isObject, key, li, numProps, ul, val, _i, _len;
+          var index, isEmpty, isObject, key, li, numProps, ul, val, _i, _len;
           if (data instanceof Array) {
             container.append('[');
             if (data.length > 0) {
@@ -32,8 +62,15 @@
               for (index = _i = 0, _len = data.length; _i < _len; index = ++_i) {
                 val = data[index];
                 li = angular.element(document.createElement('li'));
+                isObject = angular.isObject(val);
+                if (isObject) {
+                  li.append(createCollapseButton());
+                }
                 li.append("" + index + ": &nbsp;");
                 processData(val, li);
+                if (isObject) {
+                  createEllipsis(li);
+                }
                 if (index < (data.length - 1)) {
                   li.append(',');
                 }
@@ -55,35 +92,13 @@
                 li = angular.element(document.createElement('li'));
                 isObject = angular.isObject(val);
                 if (isObject) {
-
-                  /*
-                  							Show a +/- symbol which lets user expand and collapse
-                  							the object
-                   */
-                  collapser = angular.element(document.createElement('span'));
-                  collapser.addClass('collapser').text('+');
-                  collapser.on('click', function(evt) {
-                    var collapsible, ellipsis, isPlus;
-                    isPlus = evt.target.innerText === '+';
-                    evt.target.innerText = isPlus ? '-' : '+';
-                    collapsible = angular.element(evt.target.parentNode.querySelector('ul.collapsible'));
-                    ellipsis = angular.element(evt.target.parentNode.querySelector('.ellipsis'));
-                    if (isPlus) {
-                      collapsible.removeClass('hide');
-                      return ellipsis.addClass('hide');
-                    } else {
-                      collapsible.addClass('hide');
-                      return ellipsis.removeClass('hide');
-                    }
-                  });
-                  li.append(collapser);
+                  li.append(createCollapseButton());
                 }
                 li.append("<span class='prop'>" + key + "</span>");
                 li.append(': &nbsp;');
                 processData(val, li);
                 if (isObject) {
-                  angular.element(li.find('ul')[0]).addClass('hide');
-                  angular.element(li.find('ul')[0]).after("<span class='ellipsis'>...</span>");
+                  createEllipsis(li);
                 }
                 index++;
                 if (index < numProps) {

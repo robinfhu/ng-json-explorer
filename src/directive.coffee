@@ -16,6 +16,35 @@ angular.module('gd.ui.jsonexplorer', [])
 			count
 
 		###
+		Show a +/- symbol which lets user expand and collapse
+		the object
+		###
+		createCollapseButton = ->
+			collapser = angular.element document.createElement 'span'
+			collapser.addClass('collapser').text '+'
+			collapser.on 'click', (evt)->
+				isPlus = evt.target.innerText is '+'
+				evt.target.innerText = if isPlus then '-' else '+'
+
+				collapsible = angular.element(evt.target.parentNode.querySelector 'ul.collapsible')
+				ellipsisElems = evt.target.parentNode.querySelectorAll '.ellipsis'
+				ellipsis = angular.element ellipsisElems[ellipsisElems.length-1]
+
+				if isPlus
+					collapsible.removeClass 'hide'
+					ellipsis.addClass 'hide'
+				else
+					collapsible.addClass 'hide'
+					ellipsis.removeClass 'hide'
+
+			collapser
+
+		createEllipsis = (liElem)->
+			angular.element(liElem.find('ul')[0]).addClass 'hide'
+			angular.element(liElem.find('ul')[0]).after "<span class='ellipsis'>...</span>"
+
+
+		###
 		Recursively process a JSON object.
 		Renders a DOM structure that looks nice to the user
 		###
@@ -29,8 +58,16 @@ angular.module('gd.ui.jsonexplorer', [])
 
 					for val,index in data
 						li = angular.element document.createElement 'li'
+						isObject = angular.isObject val
+
+						if isObject
+							li.append createCollapseButton()
+
 						li.append "#{index}: &nbsp;"
 						processData val, li
+
+						if isObject
+							createEllipsis li
 
 						if index < (data.length - 1)
 							li.append ','
@@ -57,28 +94,7 @@ angular.module('gd.ui.jsonexplorer', [])
 						isObject = angular.isObject val
 
 						if isObject
-							###
-							Show a +/- symbol which lets user expand and collapse
-							the object
-							###
-							collapser = angular.element document.createElement 'span'
-							collapser.addClass('collapser').text '+'
-							collapser.on 'click', (evt)->
-								isPlus = evt.target.innerText is '+'
-								evt.target.innerText = if isPlus then '-' else '+'
-
-								collapsible = angular.element(evt.target.parentNode.querySelector 'ul.collapsible')
-								ellipsis = angular.element(evt.target.parentNode.querySelector '.ellipsis')
-
-								if isPlus
-									collapsible.removeClass 'hide'
-									ellipsis.addClass 'hide'
-								else
-									collapsible.addClass 'hide'
-									ellipsis.removeClass 'hide'
-
-
-							li.append collapser
+							li.append createCollapseButton()
 
 
 						li.append "<span class='prop'>#{key}</span>"
@@ -87,8 +103,7 @@ angular.module('gd.ui.jsonexplorer', [])
 						processData val, li
 
 						if isObject
-							angular.element(li.find('ul')[0]).addClass 'hide'
-							angular.element(li.find('ul')[0]).after "<span class='ellipsis'>...</span>"
+							createEllipsis li
 
 						index++
 						if index < numProps

@@ -161,7 +161,6 @@ describe 'JSON Explorer Tests', ->
 
 			should.not.exist collapser
 
-
 		describe 'clicking the collapser', ->
 			it 'should show object contents when clicked', ->
 				element = create
@@ -200,6 +199,24 @@ describe 'JSON Explorer Tests', ->
 				ellipsis = element.querySelectorAll 'ul.obj li .ellipsis'
 
 				ellipsis.should.have.length 2
+
+				ellipsis[0].className.should.not.contain 'hide'
+				ellipsis[1].className.should.contain 'hide'
+
+			it 'should show collapser for object in array', ->
+				element = create [
+					nested: '10'
+				]
+
+				collapser = element.querySelector 'ul.array li .collapser'
+
+				should.exist collapser
+
+				nestedUl = element.querySelector 'ul.array li ul.obj'
+				ellipsis = element.querySelector 'ul.array li .ellipsis'
+
+				nestedUl.className.should.contain 'hide'
+				ellipsis.className.should.not.contain 'hide'
 
 
 
