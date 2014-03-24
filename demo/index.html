@@ -4,11 +4,10 @@
 		<link rel="stylesheet" type="text/css" media="screen" href="../dist/all.css" />
 		<script src="../bower_components/angular/angular.js"></script>
 		<script src="../dist/jsonexplorer.js"></script>
-		<!-- <script src="../src/gd-ui-jsonexplorer.js"></script> -->
 		<script>
 		'use strict';
 
-		angular.module('app', ['gd.ui.jsonexplorer'])
+		angular.module('app', ['nv.ui.jsonexplorer'])
 		.controller('DemoCtrl', function ($scope) {
 			$scope.data = {
 				'name': 'Json Explorer',

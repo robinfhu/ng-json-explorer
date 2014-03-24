@@ -1,16 +1,16 @@
 describe 'JSON Explorer Tests', ->
 	describe 'module', ->
 		it 'should exist', ->
-			angular.module('gd.ui.jsonexplorer').should.have.property 'controller'
+			angular.module('nv.ui.jsonexplorer').should.have.property 'controller'
 
 	describe 'directive', ->
 		beforeEach ->
-			angular.mock.module 'gd.ui.jsonexplorer'
+			angular.mock.module 'nv.ui.jsonexplorer'
 
 		create = (data)->
 			elem = render 'json-explorer', {data}, {'json-data':'data'}
 
-			elem[0].querySelector '.gd-ui-json-explorer'
+			elem[0].querySelector '.nv-ui-json-explorer'
 
 		it 'should create a <div>', ->
 			element = create({})
