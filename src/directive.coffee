@@ -5,7 +5,10 @@ angular.module('nv.ui.jsonexplorer', [])
 		jsonData: '=jsonData'
 	template: '<div class="nv-ui-json-explorer"></div>'
 	link: (scope, elem, attrs)->
-		mainContainer = elem.find('div')
+		mainContainer = elem.find 'div'
+
+		# references. Keeps track of all objects, to check for circular refs.
+		references = []
 
 		# figure out how many properties are in an object
 		countProperties = (data)->
@@ -100,7 +103,16 @@ angular.module('nv.ui.jsonexplorer', [])
 						li.append "<span class='prop'>#{key}</span>"
 						li.append ': &nbsp;'
 
-						processData val, li
+						if isObject
+							if val not in references
+								references.push val
+								processData val, li
+							else
+								# Show message saying there is a circle ref.
+								li.append ' #Circular Reference'
+						else
+							processData val, li
+
 
 						if isObject
 							createEllipsis li
@@ -125,5 +137,8 @@ angular.module('nv.ui.jsonexplorer', [])
 			else if not data?
 				container.append "<span class='null'>null</span>"
 
-		processData scope.jsonData, mainContainer
+		scope.$watch 'jsonData', (newData)->
+			mainContainer.empty()
+			references = []
+			processData newData, mainContainer
 

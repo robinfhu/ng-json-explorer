@@ -218,6 +218,39 @@ describe 'JSON Explorer Tests', ->
 				nestedUl.className.should.contain 'hide'
 				ellipsis.className.should.not.contain 'hide'
 
+		describe 'scope watch', ->
+			it 'should update when scope variable changes', ->
+				data = {}
+				elem = render 'json-explorer', {data}, {'json-data':'data'}
+
+				elem[0].innerText.should.contain '{}'
+
+				scope = elem.scope()
+
+				scope.data = []
+
+				scope.$digest()
+
+				elem[0].innerText.should.contain '[]'
+				elem[0].innerText.should.not.contain '{}'
+
+			it 'should handle circular reference', (done)->
+				data =
+					hello: 'world'
+
+				data.circlular = data
+
+				element = create data
+
+				should.exist element
+
+				done()
+
+
+
+
+
+
 
 
 

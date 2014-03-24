@@ -1,4 +1,6 @@
 (function() {
+  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
   angular.module('nv.ui.jsonexplorer', []).directive('jsonExplorer', function() {
     return {
       restrict: 'EA',
@@ -7,8 +9,9 @@
       },
       template: '<div class="nv-ui-json-explorer"></div>',
       link: function(scope, elem, attrs) {
-        var countProperties, createCollapseButton, createEllipsis, mainContainer, processData;
+        var countProperties, createCollapseButton, createEllipsis, mainContainer, processData, references;
         mainContainer = elem.find('div');
+        references = [];
         countProperties = function(data) {
           var count, key;
           count = 0;
@@ -96,7 +99,16 @@
                 }
                 li.append("<span class='prop'>" + key + "</span>");
                 li.append(': &nbsp;');
-                processData(val, li);
+                if (isObject) {
+                  if (__indexOf.call(references, val) < 0) {
+                    references.push(val);
+                    processData(val, li);
+                  } else {
+                    li.append(' #Circular Reference');
+                  }
+                } else {
+                  processData(val, li);
+                }
                 if (isObject) {
                   createEllipsis(li);
                 }
@@ -119,7 +131,11 @@
             return container.append("<span class='null'>null</span>");
           }
         };
-        return processData(scope.jsonData, mainContainer);
+        return scope.$watch('jsonData', function(newData) {
+          mainContainer.empty();
+          references = [];
+          return processData(newData, mainContainer);
+        });
       }
     };
   });
