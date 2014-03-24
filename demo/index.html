@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" media="screen" href="../dist/all.css" />
+		<script src="../bower_components/angular/angular.js"></script>
+		<script src="../dist/jsonexplorer.js"></script>
+		<script>
+		'use strict';
+
+		angular.module('app', ['nv.ui.jsonexplorer'])
+		.controller('DemoCtrl', function ($scope) {
+			$scope.data = {
+				'name': 'Json Explorer',
+				'qty': 10,
+				'has_data': true,
+				'null_data': null,
+				'arr': [
+					10,
+					'str',
+					{
+						'nested': 'object'
+					}
+				]
+			};
+
+			$scope.data.parent = $scope.data;
+		});
+		</script>
+	</head>
+	<body ng-app="app">
+		<div ng-controller='DemoCtrl'>
+			<json-explorer json-data="data"></json-explorer>
+		</div>
+	</body>
+</html>
