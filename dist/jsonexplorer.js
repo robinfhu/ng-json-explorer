@@ -9,9 +9,7 @@
       },
       template: '<div class="nv-ui-json-explorer"></div>',
       link: function(scope, elem, attrs) {
-        var countProperties, createCollapseButton, createEllipsis, mainContainer, processData, references;
-        mainContainer = elem.find('div');
-        references = [];
+        var circularRefCheck, countProperties, createCollapseButton, createEllipsis, mainContainer, processData, references;
         countProperties = function(data) {
           var count, key;
           count = 0;
@@ -48,7 +46,28 @@
         };
         createEllipsis = function(liElem) {
           angular.element(liElem.find('ul')[0]).addClass('hide');
-          return angular.element(liElem.find('ul')[0]).after("<span class='ellipsis'>...</span>");
+          return angular.element(liElem.find('ul')[0]).after("<span class='ellipsis'>&hellip;</span>");
+        };
+
+        /*
+        		Logic that checks if an object has been processed or not.
+        		Without this logic, circular JSON objects would never stop processing,
+        		since we use recursion.
+        
+        		If the object has not been seen yet, recursively process it.
+         */
+        references = [];
+        circularRefCheck = function(val, container) {
+          if (angular.isObject(val)) {
+            if (__indexOf.call(references, val) < 0) {
+              references.push(val);
+              return processData(val, container);
+            } else {
+              return container.append(' #Circular Reference');
+            }
+          } else {
+            return processData(val, container);
+          }
         };
 
         /*
@@ -70,7 +89,7 @@
                   li.append(createCollapseButton());
                 }
                 li.append("" + index + ": &nbsp;");
-                processData(val, li);
+                circularRefCheck(val, li);
                 if (isObject) {
                   createEllipsis(li);
                 }
@@ -99,16 +118,7 @@
                 }
                 li.append("<span class='prop'>" + key + "</span>");
                 li.append(': &nbsp;');
-                if (isObject) {
-                  if (__indexOf.call(references, val) < 0) {
-                    references.push(val);
-                    processData(val, li);
-                  } else {
-                    li.append(' #Circular Reference');
-                  }
-                } else {
-                  processData(val, li);
-                }
+                circularRefCheck(val, li);
                 if (isObject) {
                   createEllipsis(li);
                 }
@@ -131,6 +141,7 @@
             return container.append("<span class='null'>null</span>");
           }
         };
+        mainContainer = elem.find('div');
         return scope.$watch('jsonData', function(newData) {
           mainContainer.empty();
           references = [];

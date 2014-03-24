@@ -234,7 +234,7 @@ describe 'JSON Explorer Tests', ->
 				elem[0].innerText.should.contain '[]'
 				elem[0].innerText.should.not.contain '{}'
 
-			it 'should handle circular reference', (done)->
+			it 'should handle circular reference (objects)', (done)->
 				data =
 					hello: 'world'
 
@@ -246,17 +246,16 @@ describe 'JSON Explorer Tests', ->
 
 				done()
 
+			it 'should handle circular reference (arrays)', (done)->
+				data = [
+					'hello'
+				]
 
+				data.push data
 
+				element = create data
 
+				should.exist element
 
-
-
-
-
-
-
-
-
-
+				done()
 
