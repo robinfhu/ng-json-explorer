@@ -10,10 +10,12 @@ Modifications by Robin Hu.
 Usage
 -------------------------
 Check the demo folder (demo.html) for a simple example.
+Include the required files (js and css). 
+This module is obviously dependent on angularJS, so include that.
 
-Including the required files (js and css)
 -------------------------
 ```
+<script src="bower_components/angular/angular.js"></script>
 <script src="dist/jsonexplorer.js"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="dist/all.css" />
 ```
