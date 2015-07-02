@@ -10,7 +10,7 @@ Modifications by Robin Hu.
 Usage
 -------------------------
 Check the demo folder (demo.html) for a simple example.
-Include the required files (js and css). 
+Include the required files (js and css).
 This module is obviously dependent on angularJS, so include that.
 
 -------------------------
@@ -44,6 +44,12 @@ Using the directive to display the data
 -------------------------
 ```
 <json-explorer json-data="data"></json-explorer>
+```
+
+If you want to have all the objects expanded by default, use the `expand` attribute:
+--------------------------
+```
+<json-explorer json-data="data" expand></json-explorer>
 ```
 
 How To Build Source
