@@ -9,7 +9,7 @@
       },
       template: '<div class="nv-ui-json-explorer"></div>',
       link: function(scope, elem, attrs) {
-        var circularRefCheck, countProperties, createCollapseButton, createEllipsis, mainContainer, processData, references;
+        var circularRefCheck, countProperties, createCollapseButton, createEllipsis, expandAll, mainContainer, processData, references;
         countProperties = function(data) {
           var count, key;
           count = 0;
@@ -18,15 +18,17 @@
           }
           return count;
         };
+        expandAll = attrs.expand != null;
 
         /*
         		Show a +/- symbol which lets user expand and collapse
         		the object
          */
         createCollapseButton = function() {
-          var collapser;
+          var collapser, defaultSymbol;
           collapser = angular.element(document.createElement('span'));
-          collapser.addClass('collapser').text('+');
+          defaultSymbol = expandAll ? '-' : '+';
+          collapser.addClass('collapser').text(defaultSymbol);
           collapser.on('click', function(evt) {
             var collapsible, ellipsis, ellipsisElems, isPlus;
             isPlus = evt.target.innerText === '+';
@@ -45,7 +47,9 @@
           return collapser;
         };
         createEllipsis = function(liElem) {
-          angular.element(liElem.find('ul')[0]).addClass('hide');
+          if (!expandAll) {
+            angular.element(liElem.find('ul')[0]).addClass('hide');
+          }
           return angular.element(liElem.find('ul')[0]).after("<span class='ellipsis'>&hellip;</span>");
         };
 

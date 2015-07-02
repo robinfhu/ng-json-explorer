@@ -161,6 +161,25 @@ describe 'JSON Explorer Tests', ->
 
 			should.not.exist collapser
 
+		it 'has mode to expand all nested objects', ->
+			data =
+				nested:
+					hello: 4321
+					foo: 'bar'
+
+			elem = render 'json-explorer', {data}, {
+				'json-data':'data',
+				'expand': 'expand'
+			}
+
+			explorer = elem[0].querySelector '.nv-ui-json-explorer'
+
+			nested = explorer.querySelector 'ul.obj li ul.obj'
+			nested.className.should.not.contain 'hide'
+
+			collapser = explorer.querySelector 'ul.obj li .collapser'
+			collapser.textContent.should.equal '-'
+
 		describe 'clicking the collapser', ->
 			it 'should show object contents when clicked', ->
 				element = create

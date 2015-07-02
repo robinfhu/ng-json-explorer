@@ -24,12 +24,33 @@
 			};
 
 			$scope.data.parent = $scope.data;
+
+			$scope.data2 = {
+				'task': [
+					{
+						'date': 'May 2012',
+						'info': '1234455'
+					},
+					{
+						'date': 'Jun 2012',
+						'info': '4525242'
+					},
+					{
+						'date': 'Jul 2012',
+						'info': '41981080'
+					}
+				]
+			};
 		});
 		</script>
 	</head>
 	<body ng-app="app">
 		<div ng-controller='DemoCtrl'>
 			<json-explorer json-data="data"></json-explorer>
+			<br/>
+			Example showing expand all by default:
+			<br/>
+			<json-explorer json-data="data2" expand></json-explorer>
 		</div>
 	</body>
 </html>

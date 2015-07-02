@@ -13,13 +13,17 @@ angular.module('nv.ui.jsonexplorer', [])
 
 			count
 
+		expandAll = attrs.expand?
+
 		###
 		Show a +/- symbol which lets user expand and collapse
 		the object
 		###
 		createCollapseButton = ->
 			collapser = angular.element document.createElement 'span'
-			collapser.addClass('collapser').text '+'
+			defaultSymbol = if expandAll then '-' else '+'
+
+			collapser.addClass('collapser').text defaultSymbol
 			collapser.on 'click', (evt)->
 				isPlus = evt.target.innerText is '+'
 				evt.target.innerText = if isPlus then '-' else '+'
@@ -39,7 +43,9 @@ angular.module('nv.ui.jsonexplorer', [])
 
 		# Creates the '...' text that is shown when an object is collapsed
 		createEllipsis = (liElem)->
-			angular.element(liElem.find('ul')[0]).addClass 'hide'
+			unless expandAll
+				angular.element(liElem.find('ul')[0]).addClass 'hide'
+
 			angular.element(liElem.find('ul')[0]).after "<span class='ellipsis'>&hellip;</span>"
 
 		###
