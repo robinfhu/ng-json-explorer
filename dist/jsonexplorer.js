@@ -9,7 +9,7 @@
       },
       template: '<div class="nv-ui-json-explorer"></div>',
       link: function(scope, elem, attrs) {
-        var circularRefCheck, countProperties, createCollapseButton, createEllipsis, expandAll, mainContainer, processData, references;
+        var arrayLimit, circularRefCheck, countProperties, createCollapseButton, createEllipsis, expandAll, mainContainer, processData, references;
         countProperties = function(data) {
           var count, key;
           count = 0;
@@ -19,6 +19,7 @@
           return count;
         };
         expandAll = attrs.expand != null;
+        arrayLimit = attrs.arrayLimit != null ? parseInt(attrs.arrayLimit) : 100;
 
         /*
         		Show a +/- symbol which lets user expand and collapse
@@ -87,6 +88,9 @@
               ul.addClass('array collapsible');
               for (index = _i = 0, _len = data.length; _i < _len; index = ++_i) {
                 val = data[index];
+                if (index >= arrayLimit) {
+                  break;
+                }
                 li = angular.element(document.createElement('li'));
                 isObject = angular.isObject(val);
                 if (isObject) {

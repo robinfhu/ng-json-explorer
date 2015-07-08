@@ -52,6 +52,8 @@ If you want to have all the objects expanded by default, use the `expand` attrib
 <json-explorer json-data="data" expand></json-explorer>
 ```
 
+Arrays have a limit of 100 elements before they are truncated. To show more or less, add the `array-limit` attribute. An `array-limit` attribute of -1 will show everything.
+
 How To Build Source
 --------------------------
 

@@ -180,6 +180,25 @@ describe 'JSON Explorer Tests', ->
 			collapser = explorer.querySelector 'ul.obj li .collapser'
 			collapser.textContent.should.equal '-'
 
+		it 'has option to limit array lengths', ->
+			data = [
+				'a'
+				'b'
+				'c'
+				'd'
+				'e'
+			]
+
+			elem = render 'json-explorer', {data}, {
+				'json-data':'data',
+				'array-limit': '3'
+			}
+
+			explorer = elem[0].querySelector '.nv-ui-json-explorer'
+
+			arrayElems = explorer.querySelectorAll 'ul.array li'
+			arrayElems.length.should.equal 3
+
 		describe 'clicking the collapser', ->
 			it 'should show object contents when clicked', ->
 				element = create

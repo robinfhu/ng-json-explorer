@@ -14,6 +14,10 @@ angular.module('nv.ui.jsonexplorer', [])
 			count
 
 		expandAll = attrs.expand?
+		arrayLimit = if attrs.arrayLimit?
+			parseInt(attrs.arrayLimit)
+		else
+			100
 
 		###
 		Show a +/- symbol which lets user expand and collapse
@@ -80,6 +84,7 @@ angular.module('nv.ui.jsonexplorer', [])
 					ul.addClass 'array collapsible'
 
 					for val,index in data
+						break if index >= arrayLimit
 						li = angular.element document.createElement 'li'
 						isObject = angular.isObject val
 
