@@ -180,6 +180,23 @@ describe 'JSON Explorer Tests', ->
 			collapser = explorer.querySelector 'ul.obj li .collapser'
 			collapser.textContent.should.equal '-'
 
+		it 'in expandAll mode, ellipsis is hidden', ->
+			data =
+				nested:
+					hello: 4321
+					foo: 'bar'
+
+			elem = render 'json-explorer', {data}, {
+				'json-data':'data',
+				'expand': 'expand'
+			}
+
+			explorer = elem[0].querySelector '.nv-ui-json-explorer'
+
+			ellipsis = explorer.querySelectorAll '.ellipsis'
+			for e in ellipsis
+				e.className.should.contain 'hide'
+
 		it 'has option to limit array lengths', ->
 			data = [
 				'a'

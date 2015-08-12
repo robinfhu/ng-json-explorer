@@ -47,10 +47,13 @@ angular.module('nv.ui.jsonexplorer', [])
 
 		# Creates the '...' text that is shown when an object is collapsed
 		createEllipsis = (liElem)->
+			ulElem = angular.element(liElem.find('ul')[0])
 			unless expandAll
-				angular.element(liElem.find('ul')[0]).addClass 'hide'
+				ulElem.addClass 'hide'
 
-			angular.element(liElem.find('ul')[0]).after "<span class='ellipsis'>&hellip;</span>"
+			hide = if expandAll then 'hide' else ''
+
+			ulElem.after "<span class='ellipsis #{hide}'>&hellip;</span>"
 
 		###
 		Logic that checks if an object has been processed or not.

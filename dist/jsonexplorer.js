@@ -48,10 +48,13 @@
           return collapser;
         };
         createEllipsis = function(liElem) {
+          var hide, ulElem;
+          ulElem = angular.element(liElem.find('ul')[0]);
           if (!expandAll) {
-            angular.element(liElem.find('ul')[0]).addClass('hide');
+            ulElem.addClass('hide');
           }
-          return angular.element(liElem.find('ul')[0]).after("<span class='ellipsis'>&hellip;</span>");
+          hide = expandAll ? 'hide' : '';
+          return ulElem.after("<span class='ellipsis " + hide + "'>&hellip;</span>");
         };
 
         /*
